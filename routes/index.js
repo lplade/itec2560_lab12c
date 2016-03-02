@@ -10,7 +10,7 @@ var baseURL = 'https://api.nasa.gov/planetary/apod' ;
 
 /* GET home page. */
 router.get('/', function(req, res){
-	res.render('index', { title: 'ASTROPIX' });
+	res.render('index', { title: 'Larry ASTROPIX' });
 });
 
 
