@@ -1,0 +1,3 @@
+[submodule "astropix"]
+	path = astropix
+	url = https://github.com/minneapolis-edu/astropix.git
