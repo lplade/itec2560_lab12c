@@ -1,23 +1,88 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
 //var bodyParser = require('body-parser');
 
 
 var request = require('request');
 var moment = require('moment');
 
-var baseURL = 'https://api.nasa.gov/planetary/apod' ;
+var baseURL = 'https://api.nasa.gov/planetary/apod';
 
 /* GET home page. */
-router.get('/', function(req, res){
-	res.render('index', { title: 'Larry ASTROPIX' });
+router.get('/', function (req, res, next) {
+	//TODO if logged in, include options for favorites
+	//TODO if not logged in, show options to log in/create account
+	res.render('index',
+		{
+			title: 'Larry ASTROPIX',
+		});
 });
+
+//these routes are based on lab 12 favorites app
+
+/* GET signup page */
+router.get('/signup', function (req, res, next) {
+	res.render('signup', {message: req.flash('signupMessage')})
+});
+
+/* POST signup */
+router.post('/signup', passport.authenticate('local-signup', {
+	successRedirect: '/member',
+	failureRedirect: '/signup',
+	failureFlash: true
+}));
+
+/* GET login page */
+router.get('/login', function (req, res, next) {
+	res.render('login', {updateMessage: req.flash('loginMessage')})
+});
+
+/* POST login */
+router.post('/login', passport.authenticate('local-login', {
+	successRedirect: '/member',
+	failureRedirect: '/login',
+	failureFlash: true
+}));
+
+/* GET logout */
+router.get('/logout', function (req, res, next) {
+	req.logout(); //passport middleware adds these functions to req.
+	res.redirect('/');
+});
+
+/* GET member page. Note isLoggedIn middleware */
+router.get('/member', isLoggedIn, function (req, res, next) {
+	res.render('member', {
+		user: req.user,
+		updateMessage: req.flash('updateMsg')
+	});
+});
+
+router.get('/auth/twitter', passport.authenticate('twitter'));
+
+router.get('/auth/twitter/callback', passport.authenticate('twitter', {
+	successRedirect: '/member',
+	failureRedirect: '/'
+}));
+
+//TODO routes for adding favorites
+
+//TODO route for searching favorites
+
+//Middleware
+function isLoggedIn(req, res, next) {
+	if (req.isAuthenticated()) {
+		return next();
+	}
+	res.redirect('/');
+}
 
 
 /* GET A picture from APOD service */
 router.get('/fetch_picture', function fetch_picture(req, res) {
 
-	if (req.query["today"] ) {
+	if (req.query["today"]) {
 		apodRequest(res, true);  //true = today's picture
 	}
 
@@ -40,16 +105,19 @@ function apodRequest(res, today) {
 	var APIKEY = process.env.APOD_API_KEY;
 
 	if (today) {
-		queryParam = { 'api_key' : APIKEY };
+		queryParam = {'api_key': APIKEY};
 	}
 	else {
-		queryParam = { "api_key" : APIKEY, "date" :randomDateString() };
+		queryParam = {"api_key": APIKEY, "date": randomDateString()};
 	}
 
 	//Use request module to request picture from APOD service.
-	request( {uri :baseURL, qs: queryParam} , function(error, apod_response, body){
+	request({
+		uri: baseURL,
+		qs: queryParam
+	}, function (error, apod_response, body) {
 
-		if (!error && apod_response.statusCode == 200){
+		if (!error && apod_response.statusCode == 200) {
 			//Have a response from APOD. Process and use to provide response to our client.
 			apodJSON = JSON.parse(body);
 			processJSONsendResponse(res, today, apodJSON);
@@ -67,7 +135,7 @@ function apodRequest(res, today) {
 }
 
 
-function processJSONsendResponse(res, today, apodJSON){
+function processJSONsendResponse(res, today, apodJSON) {
 
 	//APOD includes a copyright attribute, but only if the image is under copyright.
 	//Add a parameter for copyright or image credit, depending if there is a copyright holder
@@ -106,7 +174,7 @@ function processJSONsendResponse(res, today, apodJSON){
 
 //APOD started on June 16th, 1995. Select a random date between
 //then and yesterday.  Convert to a string in YYYY-MM-DD format.
-function randomDateString(){
+function randomDateString() {
 
 	//Create data objects for yesterday, and APOD start date
 	var today = moment().subtract(1, 'days');

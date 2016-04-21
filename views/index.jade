@@ -2,9 +2,11 @@ extends layout
 
 block content
 	h1= title
-	|<p>View astronomy pictures from NASA's
-	|<a href="http://apod.nasa.gov/apod/astropix.html">
-	|Astronomy Picture of the Day</a> service</p>
+	p View astronomy pictures from NASA's&nbsp;
+		a(href="http://apod.nasa.gov/apod/astropix.html") Astronomy Picture of the Day
+		| &nbsp;service
 
 	include buttons.jade
+	include userfooter.jade
+
 

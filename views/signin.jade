@@ -1,0 +1,15 @@
+block signin
+	.signin
+		//Display auth errors here
+		//if message.length > 0
+		p= message
+
+		form(action='/signin' method='post')
+			label username
+			input(name='username' type='text' required)
+			label password
+			input(name='password' type='password' required)
+			button.btn.btn-primary(name='login_button' type='submit' value='Login')
+
+		p If you don't have an account you can
+			a(href="/signup") sign up

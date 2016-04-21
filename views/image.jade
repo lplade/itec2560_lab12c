@@ -1,16 +1,17 @@
 extends layout
 
 block content
-	h1=title
+	h1= title
 	if media_type='image'
 		img(src='#{url}')
 	else
-		i.a(href='#{url}') Today's picure is a video - click here
+		i.a(href='#{url}') Today's picture is a video - click here
 	p.credit #{credit}
-	p.description=explanation
-	p.date This is NASA's Astronomy Picture of the Day for #{date}.else
+	p.description= explanation
+	p.date This is NASA's Astronomy Picture of the Day for #{date}.
 
 	p
 		a(href="#{apodurl}") See this image at NASA's site
 
 	include buttons.jade
+	include userfooter.jade

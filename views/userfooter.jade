@@ -1,0 +1,17 @@
+block userfooter
+	.userfooter
+		if signedin
+			p you are signed in
+			.favoritesbuttons
+				a.btn.btn-primary(href="/markfavorite") Mark as favorite
+				br
+				a.btn.btn-primary(href="/showfavorites") Favorites
+				a.btn.btn-primary(href="/signout") Sign out
+		else
+			p Sign in to save favorite pictures
+			.loginbuttons
+				a.btn.btn-primary(href="/signin") Sign in
+				a.btn.btn-primary(href="/signup") Create account
+				b &nbsp; - or - &nbsp;
+				a.btn.btn-primary(href="/auth/twitter") Sign in with Twitter
+

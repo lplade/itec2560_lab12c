@@ -4,9 +4,10 @@ html
 		title= title
 		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
 		link(rel='stylesheet', href='/stylesheets/style.css')
-		script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
-		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
 	body
 		block content
-
-		| <p class="footermessage">Astronomy Pictures of the day from NASA. <a href="/" Astropix Home Page.</a></p>
+	footer
+		p.footermessage Astronomy Picture of the Day from NASA.
+			a(href="/") &nbsp;Astropix home page
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
+	script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
